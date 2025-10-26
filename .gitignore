@@ -3,3 +3,13 @@ dist/
 *.log
 .DS_Store
 config.json
+
+# Build output
+dist/
+out/
+build/*.icns
+build/*.ico
+*.dmg
+*.exe
+*.zip
+*.AppImage
