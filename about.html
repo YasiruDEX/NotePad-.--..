@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About & Shortcuts</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .version {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    h2 {
+      font-size: 16px;
+      margin-top: 20px;
+      margin-bottom: 15px;
+      color: #444;
+      border-bottom: 1px solid #e0e0e0;
+      padding-bottom: 8px;
+    }
+
+    .shortcut-list {
+      list-style: none;
+    }
+
+    .shortcut-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .shortcut-item:last-child {
+      border-bottom: none;
+    }
+
+    .shortcut-name {
+      color: #333;
+      font-size: 14px;
+    }
+
+    .shortcut-keys {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background-color: #f5f5f5;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 13px;
+      color: #555;
+      border: 1px solid #e0e0e0;
+    }
+
+    .description {
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #666;
+    }
+
+    .button-group {
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    button {
+      padding: 8px 24px;
+      font-size: 14px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      background-color: #4a90e2;
+      color: white;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background-color: #357abd;
+    }
+
+    .mac-note {
+      font-size: 12px;
+      color: #888;
+      margin-top: 15px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>NotePad .- ..</h1>
+    <div class="version">Version 1.0.0</div>
+
+    <h2>Keyboard Shortcuts</h2>
+    <ul class="shortcut-list">
+      <li class="shortcut-item">
+        <span class="shortcut-name">New File</span>
+        <span class="shortcut-keys">Ctrl+N / Cmd+N</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Open File</span>
+        <span class="shortcut-keys">Ctrl+O / Cmd+O</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Save File</span>
+        <span class="shortcut-keys">Ctrl+S / Cmd+S</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Exit</span>
+        <span class="shortcut-keys">Ctrl+Q / Cmd+Q</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Undo</span>
+        <span class="shortcut-keys">Ctrl+Z / Cmd+Z</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Redo</span>
+        <span class="shortcut-keys">Ctrl+Y / Cmd+Shift+Z</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Cut</span>
+        <span class="shortcut-keys">Ctrl+X / Cmd+X</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Copy</span>
+        <span class="shortcut-keys">Ctrl+C / Cmd+C</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Paste</span>
+        <span class="shortcut-keys">Ctrl+V / Cmd+V</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name">Select All</span>
+        <span class="shortcut-keys">Ctrl+A / Cmd+A</span>
+      </li>
+      <li class="shortcut-item">
+        <span class="shortcut-name"><strong>Ask Gemini AI</strong></span>
+        <span class="shortcut-keys">Ctrl+Shift+G / Cmd+Shift+G</span>
+      </li>
+    </ul>
+
+    <div class="description">
+      <h2>How to Use AI Feature</h2>
+      <p>
+        1. Set your Gemini API key in <strong>File → Preferences</strong><br>
+        2. Type your question or prompt in the editor<br>
+        3. Press <strong>Ctrl+Shift+G</strong> (or <strong>Cmd+Shift+G</strong> on Mac)<br>
+        4. The AI response will appear below your text
+      </p>
+    </div>
+
+    <p class="mac-note">
+      * On macOS, use Cmd instead of Ctrl
+    </p>
+
+    <div class="button-group">
+      <button onclick="window.close()">Close</button>
+    </div>
+  </div>
+</body>
+</html>

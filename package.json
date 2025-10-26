@@ -1,0 +1,24 @@
+{
+  "name": "notepad-ai",
+  "version": "1.0.0",
+  "description": "Simple Notepad with Gemini AI integration",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "keywords": [
+    "electron",
+    "notepad",
+    "gemini",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.1.3"
+  }
+}

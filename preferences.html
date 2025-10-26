@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preferences</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      max-height: 460px;
+      overflow-y: auto;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .section {
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .section:last-of-type {
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    input[type="number"],
+    input[type="color"] {
+      width: 100%;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    input[type="color"] {
+      height: 40px;
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+    }
+
+    .color-group {
+      display: flex;
+      gap: 15px;
+    }
+
+    .color-item {
+      flex: 1;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 8px 16px;
+      font-size: 13px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background-color: #4a90e2;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #357abd;
+    }
+
+    .btn-secondary {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background-color: #d0d0d0;
+    }
+
+    .btn-reset {
+      background-color: #f0ad4e;
+      color: white;
+    }
+
+    .btn-reset:hover {
+      background-color: #ec971f;
+    }
+
+    .info {
+      font-size: 11px;
+      color: #666;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    .info a {
+      color: #4a90e2;
+      text-decoration: none;
+    }
+
+    .info a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Preferences</h2>
+    
+    <div class="section">
+      <div class="section-title">AI Configuration</div>
+      
+      <div class="form-group">
+        <label for="apiKey">Gemini API Key:</label>
+        <input 
+          type="password" 
+          id="apiKey" 
+          placeholder="Enter your Gemini API key"
+        >
+        <div class="info">
+          Get your API key from <a href="#" onclick="openLink('https://makersuite.google.com/app/apikey')">Google AI Studio</a>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="maxTokens">Max Tokens:</label>
+        <input 
+          type="number" 
+          id="maxTokens" 
+          placeholder="2048"
+          min="100"
+          max="8192"
+          step="256"
+        >
+        <div class="info">
+          Maximum length of AI response (100-8192). Default: 2048
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="modelName">Model Name:</label>
+        <input 
+          type="text" 
+          id="modelName" 
+          placeholder="gemini-2.5-flash-lite"
+        >
+        <div class="info">
+          Gemini model to use. Examples: gemini-2.5-flash, gemini-2.5-flash-lite, gemini-1.5-flash, etc. Default: gemini-2.5-flash-lite
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Appearance</div>
+      
+      <div class="color-group">
+        <div class="color-item">
+          <label for="backgroundColor">Background Color:</label>
+          <input 
+            type="color" 
+            id="backgroundColor"
+          >
+        </div>
+
+        <div class="color-item">
+          <label for="fontColor">Font Color:</label>
+          <input 
+            type="color" 
+            id="fontColor"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="fontSize">Font Size (px):</label>
+        <input 
+          type="number" 
+          id="fontSize" 
+          placeholder="14"
+          min="8"
+          max="32"
+          step="1"
+        >
+        <div class="info">
+          Font size in pixels (8-32). Default: 14
+        </div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-reset" onclick="resetColors()">Reset Colors</button>
+      <button class="btn-secondary" onclick="window.close()">Cancel</button>
+      <button class="btn-primary" onclick="saveSettings()">Save</button>
+    </div>
+  </div>
+
+  <script>
+    // Default settings
+    const defaultSettings = {
+      backgroundColor: '#ffffff',
+      fontColor: '#000000',
+      fontSize: 14
+    };
+
+    // Load existing settings
+    window.electronAPI.onLoadSettings((settings) => {
+      document.getElementById('apiKey').value = settings.apiKey || '';
+      document.getElementById('maxTokens').value = settings.maxTokens || 2048;
+      document.getElementById('modelName').value = settings.modelName || 'gemini-2.5-flash-lite';
+      document.getElementById('backgroundColor').value = settings.backgroundColor || '#ffffff';
+      document.getElementById('fontColor').value = settings.fontColor || '#000000';
+      document.getElementById('fontSize').value = settings.fontSize || 14;
+    });
+
+    function saveSettings() {
+      const settings = {
+        apiKey: document.getElementById('apiKey').value.trim(),
+        maxTokens: parseInt(document.getElementById('maxTokens').value) || 2048,
+        modelName: document.getElementById('modelName').value.trim() || 'gemini-2.5-flash-lite',
+        backgroundColor: document.getElementById('backgroundColor').value,
+        fontColor: document.getElementById('fontColor').value,
+        fontSize: parseInt(document.getElementById('fontSize').value) || 14
+      };
+      
+      window.electronAPI.saveSettings(settings);
+    }
+
+    function resetColors() {
+      document.getElementById('backgroundColor').value = defaultSettings.backgroundColor;
+      document.getElementById('fontColor').value = defaultSettings.fontColor;
+      document.getElementById('fontSize').value = defaultSettings.fontSize;
+    }
+
+    window.electronAPI.onSettingsSaved(() => {
+      alert('Settings saved successfully!');
+      window.close();
+    });
+
+    function openLink(url) {
+      require('electron').shell.openExternal(url);
+      return false;
+    }
+
+    // Focus on input when window loads
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('apiKey').focus();
+    });
+  </script>
+</body>
+</html>
