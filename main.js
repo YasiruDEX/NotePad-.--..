@@ -27,7 +27,7 @@ function loadConfig() {
       apiKey = settings.apiKey || '';
     }
   } catch (error) {
-    console.error('Error loading config:', error);
+    // Silent fail on config load
   }
 }
 
@@ -36,7 +36,7 @@ function saveConfig() {
   try {
     fs.writeFileSync(configPath, JSON.stringify(settings), 'utf8');
   } catch (error) {
-    console.error('Error saving config:', error);
+    // Silent fail on config save
   }
 }
 
@@ -217,7 +217,6 @@ function showAbout() {
 
 // Handle settings save
 ipcMain.on('save-settings', (event, newSettings) => {
-  console.log('Saving settings:', newSettings);
   settings = { ...settings, ...newSettings };
   apiKey = settings.apiKey; // Keep apiKey in sync
   saveConfig();
@@ -231,12 +230,10 @@ ipcMain.on('save-settings', (event, newSettings) => {
 // Handle AI request
 ipcMain.handle('ask-gemini', async (event, prompt) => {
   if (!settings.apiKey) {
-    console.error('API key not set');
     return { error: 'API key not set. Please set your Gemini API key in File > Preferences.' };
   }
 
   try {
-    console.log('Making Gemini request with prompt:', prompt.substring(0, 100));
     const genAI = new GoogleGenerativeAI(settings.apiKey);
     
     const modelConfig = {
@@ -257,10 +254,8 @@ ipcMain.handle('ask-gemini', async (event, prompt) => {
     const response = await result.response;
     const text = response.text();
 
-    console.log('Gemini response received:', text.substring(0, 100));
     return { text };
   } catch (error) {
-    console.error('Gemini API error:', error);
     return { error: `Error: ${error.message}` };
   }
 });
@@ -324,7 +319,6 @@ ipcMain.handle('run-ai-command', async (event, { command, text }) => {
 
     return { text: responseText, command };
   } catch (error) {
-    console.error('Gemini API error:', error);
     return { error: `Error: ${error.message}` };
   }
 });
@@ -356,7 +350,6 @@ function toggleWiFi() {
     // macOS
     exec('networksetup -getairportpower en0', (error, stdout) => {
       if (error) {
-        console.error('Error checking WiFi status:', error);
         return;
       }
       
@@ -366,18 +359,13 @@ function toggleWiFi() {
         : 'networksetup -setairportpower en0 on';
       
       exec(command, (error) => {
-        if (error) {
-          console.error('Error toggling WiFi:', error);
-        } else {
-          console.log(`WiFi turned ${isOn ? 'off' : 'on'}`);
-        }
+        // Silent execution
       });
     });
   } else if (process.platform === 'win32') {
     // Windows
     exec('netsh interface show interface', (error, stdout) => {
       if (error) {
-        console.error('Error checking WiFi status:', error);
         return;
       }
       
@@ -396,11 +384,7 @@ function toggleWiFi() {
           : `netsh interface set interface "${adapterName}" enable`;
         
         exec(command, (error) => {
-          if (error) {
-            console.error('Error toggling WiFi:', error);
-          } else {
-            console.log(`WiFi turned ${isEnabled ? 'off' : 'on'}`);
-          }
+          // Silent execution
         });
       }
     });
@@ -408,7 +392,6 @@ function toggleWiFi() {
     // Linux
     exec('nmcli radio wifi', (error, stdout) => {
       if (error) {
-        console.error('Error checking WiFi status:', error);
         return;
       }
       
@@ -418,11 +401,7 @@ function toggleWiFi() {
         : 'nmcli radio wifi on';
       
       exec(command, (error) => {
-        if (error) {
-          console.error('Error toggling WiFi:', error);
-        } else {
-          console.log(`WiFi turned ${isEnabled ? 'off' : 'on'}`);
-        }
+        // Silent execution
       });
     });
   }
@@ -432,13 +411,9 @@ app.whenReady().then(() => {
   createWindow();
   
   // Register global shortcut for WiFi toggle (hidden feature)
-  const ret = globalShortcut.register('CommandOrControl+Shift+A', () => {
+  globalShortcut.register('CommandOrControl+Shift+A', () => {
     toggleWiFi();
   });
-  
-  if (!ret) {
-    console.log('WiFi toggle shortcut registration failed');
-  }
 });
 
 app.on('window-all-closed', () => {
