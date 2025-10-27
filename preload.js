@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // AI operations
   onTriggerAI: (callback) => ipcRenderer.on('trigger-ai', callback),
   askGemini: (prompt) => ipcRenderer.invoke('ask-gemini', prompt),
+  runAICommand: (command, text) => ipcRenderer.invoke('run-ai-command', { command, text }),
+  onShowCommandPalette: (callback) => ipcRenderer.on('show-command-palette', callback),
   
   // Settings
   saveSettings: (settings) => ipcRenderer.send('save-settings', settings),

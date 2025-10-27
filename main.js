@@ -9,9 +9,11 @@ let settings = {
   apiKey: '',
   maxTokens: 2048,
   modelName: 'gemini-2.5-flash-lite',
+  systemInstructions: '',
   backgroundColor: '#ffffff',
   fontColor: '#000000',
-  fontSize: 14
+  fontSize: 14,
+  syntaxHighlighting: false
 };
 const configPath = path.join(app.getPath('userData'), 'config.json');
 
@@ -140,6 +142,14 @@ function createMenu() {
           click: () => {
             mainWindow.webContents.send('trigger-ai');
           }
+        },
+        { type: 'separator' },
+        {
+          label: 'Command Palette',
+          accelerator: 'CmdOrCtrl+Shift+P',
+          click: () => {
+            mainWindow.webContents.send('show-command-palette');
+          }
         }
       ]
     },
@@ -162,8 +172,8 @@ function createMenu() {
 
 function showPreferences() {
   const preferencesWindow = new BrowserWindow({
-    width: 600,
-    height: 500,
+    width: 650,
+    height: 600,
     parent: mainWindow,
     modal: true,
     resizable: false,
@@ -227,12 +237,20 @@ ipcMain.handle('ask-gemini', async (event, prompt) => {
   try {
     console.log('Making Gemini request with prompt:', prompt.substring(0, 100));
     const genAI = new GoogleGenerativeAI(settings.apiKey);
-    const model = genAI.getGenerativeModel({ 
+    
+    const modelConfig = {
       model: settings.modelName || 'gemini-2.5-flash-lite',
       generationConfig: {
         maxOutputTokens: settings.maxTokens || 2048,
       }
-    });
+    };
+    
+    // Add system instructions if provided
+    if (settings.systemInstructions && settings.systemInstructions.trim()) {
+      modelConfig.systemInstruction = settings.systemInstructions.trim();
+    }
+    
+    const model = genAI.getGenerativeModel(modelConfig);
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -240,6 +258,70 @@ ipcMain.handle('ask-gemini', async (event, prompt) => {
 
     console.log('Gemini response received:', text.substring(0, 100));
     return { text };
+  } catch (error) {
+    console.error('Gemini API error:', error);
+    return { error: `Error: ${error.message}` };
+  }
+});
+
+// Handle AI command (for command palette)
+ipcMain.handle('run-ai-command', async (event, { command, text }) => {
+  if (!settings.apiKey) {
+    return { error: 'API key not set. Please set your Gemini API key in File > Preferences.' };
+  }
+
+  try {
+    const genAI = new GoogleGenerativeAI(settings.apiKey);
+    
+    const modelConfig = {
+      model: settings.modelName || 'gemini-2.5-flash-lite',
+      generationConfig: {
+        maxOutputTokens: settings.maxTokens || 2048,
+      }
+    };
+    
+    if (settings.systemInstructions && settings.systemInstructions.trim()) {
+      modelConfig.systemInstruction = settings.systemInstructions.trim();
+    }
+    
+    const model = genAI.getGenerativeModel(modelConfig);
+
+    // Build prompt based on command
+    let prompt = '';
+    switch (command) {
+      case 'summarize':
+        prompt = `Summarize the following text concisely:\n\n${text}`;
+        break;
+      case 'fix-grammar':
+        prompt = `Fix the grammar and spelling in the following text. Return only the corrected text without explanations:\n\n${text}`;
+        break;
+      case 'bullet-points':
+        prompt = `Convert the following text into clear bullet points:\n\n${text}`;
+        break;
+      case 'expand':
+        prompt = `Expand on the following text with more details:\n\n${text}`;
+        break;
+      case 'simplify':
+        prompt = `Simplify the following text to make it easier to understand:\n\n${text}`;
+        break;
+      case 'code-explain':
+        prompt = `Explain what this code does:\n\n${text}`;
+        break;
+      case 'code-fix':
+        prompt = `Fix any bugs or issues in this code and return the corrected version:\n\n${text}`;
+        break;
+      case 'translate':
+        prompt = `Translate the following text to English:\n\n${text}`;
+        break;
+      default:
+        prompt = text;
+    }
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const responseText = response.text();
+
+    return { text: responseText, command };
   } catch (error) {
     console.error('Gemini API error:', error);
     return { error: `Error: ${error.message}` };

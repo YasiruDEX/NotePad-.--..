@@ -5,6 +5,7 @@ To build the application properly, you need to add icon files to this directory:
 ## Required Files:
 
 1. **icon.icns** - macOS app icon
+
    - Format: ICNS
    - Recommended size: 1024x1024 PNG source
 
@@ -15,6 +16,7 @@ To build the application properly, you need to add icon files to this directory:
 ## How to Create Icons:
 
 ### Option 1: Use Online Tools
+
 - Go to https://cloudconvert.com/png-to-icns (for macOS)
 - Go to https://cloudconvert.com/png-to-ico (for Windows)
 - Upload a 1024x1024 PNG image
@@ -23,6 +25,7 @@ To build the application properly, you need to add icon files to this directory:
 ### Option 2: Use Command Line Tools
 
 **For macOS (.icns):**
+
 ```bash
 # Create iconset directory
 mkdir icon.iconset
@@ -37,6 +40,7 @@ iconutil -c icns icon.iconset
 
 **For Windows (.ico):**
 Use ImageMagick:
+
 ```bash
 magick convert icon-256.png -define icon:auto-resize=256,128,64,48,32,16 icon.ico
 ```
