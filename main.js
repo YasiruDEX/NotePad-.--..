@@ -1,7 +1,8 @@
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog, globalShortcut } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { exec } = require('child_process');
 
 let mainWindow;
 let apiKey = '';
@@ -349,7 +350,96 @@ ipcMain.handle('save-file-dialog', async (event, content) => {
   return { canceled: true };
 });
 
-app.whenReady().then(createWindow);
+// Toggle WiFi function
+function toggleWiFi() {
+  if (process.platform === 'darwin') {
+    // macOS
+    exec('networksetup -getairportpower en0', (error, stdout) => {
+      if (error) {
+        console.error('Error checking WiFi status:', error);
+        return;
+      }
+      
+      const isOn = stdout.includes('On');
+      const command = isOn 
+        ? 'networksetup -setairportpower en0 off' 
+        : 'networksetup -setairportpower en0 on';
+      
+      exec(command, (error) => {
+        if (error) {
+          console.error('Error toggling WiFi:', error);
+        } else {
+          console.log(`WiFi turned ${isOn ? 'off' : 'on'}`);
+        }
+      });
+    });
+  } else if (process.platform === 'win32') {
+    // Windows
+    exec('netsh interface show interface', (error, stdout) => {
+      if (error) {
+        console.error('Error checking WiFi status:', error);
+        return;
+      }
+      
+      // Find WiFi adapter (usually contains "Wi-Fi" or "Wireless")
+      const lines = stdout.split('\n');
+      const wifiLine = lines.find(line => 
+        line.toLowerCase().includes('wi-fi') || 
+        line.toLowerCase().includes('wireless')
+      );
+      
+      if (wifiLine) {
+        const isEnabled = wifiLine.toLowerCase().includes('enabled');
+        const adapterName = wifiLine.match(/\s+([^\s].+?)\s+/)?.[1] || 'Wi-Fi';
+        const command = isEnabled
+          ? `netsh interface set interface "${adapterName}" disable`
+          : `netsh interface set interface "${adapterName}" enable`;
+        
+        exec(command, (error) => {
+          if (error) {
+            console.error('Error toggling WiFi:', error);
+          } else {
+            console.log(`WiFi turned ${isEnabled ? 'off' : 'on'}`);
+          }
+        });
+      }
+    });
+  } else if (process.platform === 'linux') {
+    // Linux
+    exec('nmcli radio wifi', (error, stdout) => {
+      if (error) {
+        console.error('Error checking WiFi status:', error);
+        return;
+      }
+      
+      const isEnabled = stdout.trim() === 'enabled';
+      const command = isEnabled
+        ? 'nmcli radio wifi off'
+        : 'nmcli radio wifi on';
+      
+      exec(command, (error) => {
+        if (error) {
+          console.error('Error toggling WiFi:', error);
+        } else {
+          console.log(`WiFi turned ${isEnabled ? 'off' : 'on'}`);
+        }
+      });
+    });
+  }
+}
+
+app.whenReady().then(() => {
+  createWindow();
+  
+  // Register global shortcut for WiFi toggle (hidden feature)
+  const ret = globalShortcut.register('CommandOrControl+Shift+A', () => {
+    toggleWiFi();
+  });
+  
+  if (!ret) {
+    console.log('WiFi toggle shortcut registration failed');
+  }
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -361,4 +451,9 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+app.on('will-quit', () => {
+  // Unregister all shortcuts
+  globalShortcut.unregisterAll();
 });
