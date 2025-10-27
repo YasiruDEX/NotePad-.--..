@@ -134,26 +134,26 @@ function createMenu() {
         { role: 'selectAll' }
       ]
     },
-    {
-      label: 'AI',
-      submenu: [
-        {
-          label: 'Ask Gemini',
-          accelerator: 'CmdOrCtrl+Shift+G',
-          click: () => {
-            mainWindow.webContents.send('trigger-ai');
-          }
-        },
-        { type: 'separator' },
-        {
-          label: 'Command Palette',
-          accelerator: 'CmdOrCtrl+Shift+P',
-          click: () => {
-            mainWindow.webContents.send('show-command-palette');
-          }
-        }
-      ]
-    },
+    // {
+    //   label: 'AI',
+    //   submenu: [
+    //     {
+    //       label: 'Ask Gemini',
+    //       accelerator: 'CmdOrCtrl+Shift+G',
+    //       click: () => {
+    //         mainWindow.webContents.send('trigger-ai');
+    //       }
+    //     },
+    //     { type: 'separator' },
+    //     {
+    //       label: 'Command Palette',
+    //       accelerator: 'CmdOrCtrl+Shift+P',
+    //       click: () => {
+    //         mainWindow.webContents.send('show-command-palette');
+    //       }
+    //     }
+    //   ]
+    // },
     {
       label: 'Help',
       submenu: [
