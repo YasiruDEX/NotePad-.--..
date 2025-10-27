@@ -28,7 +28,7 @@
   },
   "build": {
     "appId": "com.notepad-ai.app",
-    "productName": "Notepad AI",
+    "productName": "NotePad .- ..",
     "directories": {
       "output": "dist"
     },
@@ -59,7 +59,7 @@
       ]
     },
     "dmg": {
-      "title": "Notepad AI ${version}",
+      "title": "NotePad .- .. ${version}",
       "contents": [
         {
           "x": 130,
