@@ -236,6 +236,12 @@ ipcMain.handle('ask-gemini', async (event, prompt) => {
   try {
     const genAI = new GoogleGenerativeAI(settings.apiKey);
     
+    // Add system instructions to the prompt if provided
+    let fullPrompt = prompt;
+    if (settings.systemInstructions && settings.systemInstructions.trim()) {
+      fullPrompt = `${settings.systemInstructions}\n\n${prompt}`;
+    }
+    
     const modelConfig = {
       model: settings.modelName || 'gemini-2.5-flash-lite',
       generationConfig: {
@@ -243,14 +249,9 @@ ipcMain.handle('ask-gemini', async (event, prompt) => {
       }
     };
     
-    // Add system instructions if provided
-    if (settings.systemInstructions && settings.systemInstructions.trim()) {
-      modelConfig.systemInstruction = settings.systemInstructions.trim();
-    }
-    
     const model = genAI.getGenerativeModel(modelConfig);
 
-    const result = await model.generateContent(prompt);
+    const result = await model.generateContent(fullPrompt);
     const response = await result.response;
     const text = response.text();
 
@@ -275,10 +276,6 @@ ipcMain.handle('run-ai-command', async (event, { command, text }) => {
         maxOutputTokens: settings.maxTokens || 2048,
       }
     };
-    
-    if (settings.systemInstructions && settings.systemInstructions.trim()) {
-      modelConfig.systemInstruction = settings.systemInstructions.trim();
-    }
     
     const model = genAI.getGenerativeModel(modelConfig);
 
@@ -311,6 +308,11 @@ ipcMain.handle('run-ai-command', async (event, { command, text }) => {
         break;
       default:
         prompt = text;
+    }
+    
+    // Add system instructions if provided
+    if (settings.systemInstructions && settings.systemInstructions.trim()) {
+      prompt = `${settings.systemInstructions}\n\n${prompt}`;
     }
 
     const result = await model.generateContent(prompt);
